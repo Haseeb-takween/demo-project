@@ -167,10 +167,8 @@ pnpm start
 ## Known limitations
 
 - Single admin account only (env-based login, no password reset)
-- Weak JWT secret in dev — use a strong random value in production
 - Admin session expires after 1 hour
 - No email sent to admin on new submissions
-- Phone number not shown in admin table
 - Long messages truncated in the table
 - No pagination, search, or filters
 - No rate limiting or CAPTCHA on the form

@@ -99,6 +99,7 @@ export default function AdminDashboardPage() {
 								<tr>
 									<th className='px-4 py-3 font-medium'>Name</th>
 									<th className='px-4 py-3 font-medium'>Email</th>
+									<th className='px-4 py-3 font-medium'>Phone</th>
 									<th className='px-4 py-3 font-medium'>Service</th>
 									<th className='px-4 py-3 font-medium'>Date</th>
 									<th className='px-4 py-3 font-medium'>Message</th>
@@ -117,6 +118,7 @@ export default function AdminDashboardPage() {
 										}>
 										<td className='px-4 py-3'>{item.fullName}</td>
 										<td className='px-4 py-3'>{item.email}</td>
+										<td className='px-4 py-3 whitespace-nowrap'>{item.phone}</td>
 										<td className='px-4 py-3'>{item.service}</td>
 										<td className='px-4 py-3 whitespace-nowrap'>
 											{new Date(item.preferredDate).toLocaleDateString()}
