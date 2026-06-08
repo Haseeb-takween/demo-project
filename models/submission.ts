@@ -8,7 +8,6 @@ interface ISubmission {
   service: string;
   preferredDate: string;
   message: string;
-  createdAt: Date;
   reviewed: boolean;
 }
 
@@ -36,10 +35,6 @@ const submissionSchema = new Schema<ISubmission>({
   message: {
     type: String,
     required: [true, "Message is required"],
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
   },
   reviewed: {
     type: Boolean,

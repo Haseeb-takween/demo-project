@@ -55,17 +55,6 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		if (
-			error instanceof Error &&
-			'code' in error &&
-			error.code === 11000
-		) {
-			return NextResponse.json(
-				{ error: 'A submission with this email already exists' },
-				{ status: 409 },
-			);
-		}
-
 		return NextResponse.json(
 			{ error: 'Internal server error' },
 			{ status: 500 },
