@@ -13,7 +13,7 @@ Landing page and enquiry system for **Servio**, a fictional local-services booki
 - Full landing page: hero, services, how it works, benefits, testimonials, FAQ, service finder, CTA
 - Enquiry modal (Zod + React Hook Form) with service presets from the hero / finder
 - Smooth scrolling (Lenis), motion (Framer Motion), teal brand UI (shadcn/ui + Tailwind)
-- Redirect to `/thank-you` after a successful submission
+- In-modal “Enquiry sent!” confirmation after a successful submission
 
 ### Public enquiry flow
 - Fields: full name, email, phone, service type, preferred date, message
@@ -53,7 +53,6 @@ service_enquiry-_and_booking_system/
 │   ├── layout.tsx               # Root layout, fonts, toaster
 │   ├── globals.css              # Design tokens + utilities
 │   ├── components/              # Landing sections + enquiry dialog
-│   ├── thank-you/page.tsx       # Post-submission page
 │   ├── admin/
 │   │   ├── login/page.tsx       # Admin login
 │   │   └── page.tsx             # Admin dashboard
@@ -131,7 +130,6 @@ pnpm dev
 | Surface | URL |
 |---------|-----|
 | Landing + enquiry | http://localhost:3000 |
-| Thank you | http://localhost:3000/thank-you |
 | Admin login | http://localhost:3000/admin/login |
 
 ### Production build
@@ -146,7 +144,7 @@ pnpm start
 ## How to test
 
 1. Open http://localhost:3000 and click **Request a service** (or Book from the hero card).
-2. Submit a valid enquiry and confirm redirect to `/thank-you`.
+2. Submit a valid enquiry and confirm the in-modal “Enquiry sent!” state.
 3. Check the inbox for the confirmation email.
 4. Sign in at `/admin/login` with `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 5. Confirm the submission appears; mark it reviewed.

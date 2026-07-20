@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -60,7 +59,6 @@ const fieldShell =
   'h-11 w-full rounded-lg border border-input bg-background px-3.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:border-primary disabled:opacity-50';
 
 export function EnquiryDialog({ open, onOpenChange, presetService }: EnquiryDialogProps) {
-  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -84,11 +82,20 @@ export function EnquiryDialog({ open, onOpenChange, presetService }: EnquiryDial
   });
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      setSuccess(false);
+      setSubmitting(false);
+      reset();
+      return;
+    }
     if (presetService) {
       setValue('service', presetService, { shouldValidate: false });
     }
-  }, [open, presetService, setValue]);
+  }, [open, presetService, setValue, reset]);
+
+  function handleOpenChange(next: boolean) {
+    onOpenChange(next);
+  }
 
   async function onSubmit(data: FormValues) {
     setSubmitting(true);
@@ -106,14 +113,6 @@ export function EnquiryDialog({ open, onOpenChange, presetService }: EnquiryDial
       }
 
       setSuccess(true);
-      setTimeout(() => {
-        reset();
-        onOpenChange(false);
-        setSuccess(false);
-        router.push(
-          `/thank-you?fullName=${encodeURIComponent(json.fullName)}&email=${encodeURIComponent(json.email)}`
-        );
-      }, 1200);
     } catch {
       toast.error('Network error. Please check your connection and try again.');
     } finally {
@@ -122,7 +121,7 @@ export function EnquiryDialog({ open, onOpenChange, presetService }: EnquiryDial
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
         data-lenis-prevent
         className="flex max-h-[min(92vh,720px)] w-full flex-col gap-0 overflow-hidden rounded-xl border-border p-0 sm:max-w-lg"
@@ -131,27 +130,31 @@ export function EnquiryDialog({ open, onOpenChange, presetService }: EnquiryDial
         <div className="shrink-0 border-b border-border px-5 pb-4 pt-5 sm:px-6 sm:pt-6">
           <DialogHeader className="gap-1.5 pr-8">
             <DialogTitle className="font-display text-xl font-bold text-foreground">
-              Request a service
+              {success ? 'Enquiry sent' : 'Request a service'}
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground text-pretty">
-              Tell us what you need. We will match you with a verified local professional.
+              {success
+                ? 'We will review your request and get back to you soon.'
+                : 'Tell us what you need. We will match you with a verified local professional.'}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <LockIcon className="size-3 text-primary" aria-hidden />
-              Free to enquire
-            </span>
-            <span className="flex items-center gap-1.5">
-              <ShieldCheckIcon className="size-3 text-primary" aria-hidden />
-              Verified professionals
-            </span>
-            <span className="flex items-center gap-1.5">
-              <ClockIcon className="size-3 text-primary" aria-hidden />
-              Clear quotes before booking
-            </span>
-          </div>
+          {!success && (
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <LockIcon className="size-3 text-primary" aria-hidden />
+                Free to enquire
+              </span>
+              <span className="flex items-center gap-1.5">
+                <ShieldCheckIcon className="size-3 text-primary" aria-hidden />
+                Verified professionals
+              </span>
+              <span className="flex items-center gap-1.5">
+                <ClockIcon className="size-3 text-primary" aria-hidden />
+                Clear quotes before booking
+              </span>
+            </div>
+          )}
         </div>
 
         <AnimatePresence mode="wait">
@@ -161,15 +164,27 @@ export function EnquiryDialog({ open, onOpenChange, presetService }: EnquiryDial
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.35 }}
-              className="flex flex-1 flex-col items-center justify-center gap-3 px-5 py-12"
+              className="flex flex-1 flex-col items-center justify-center gap-4 px-5 py-12 sm:px-6"
             >
               <div className="flex size-14 items-center justify-center rounded-full bg-accent-soft">
                 <CheckIcon className="size-7 text-primary" />
               </div>
-              <p className="m-0 font-display text-lg font-semibold text-foreground">Enquiry sent!</p>
-              <p className="m-0 text-center text-sm text-muted-foreground">
-                Redirecting you to your confirmation…
-              </p>
+              <div className="text-center">
+                <p className="m-0 font-display text-lg font-semibold text-foreground">
+                  Enquiry sent!
+                </p>
+                <p className="mt-1.5 m-0 text-sm text-muted-foreground text-pretty">
+                  Thanks for reaching out. A verified local pro will follow up with clear next steps.
+                </p>
+              </div>
+              <Button
+                type="button"
+                size="lg"
+                className="mt-2 min-w-40"
+                onClick={() => handleOpenChange(false)}
+              >
+                Done
+              </Button>
             </motion.div>
           ) : (
             <form
