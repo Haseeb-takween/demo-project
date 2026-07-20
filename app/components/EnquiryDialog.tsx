@@ -82,18 +82,17 @@ export function EnquiryDialog({ open, onOpenChange, presetService }: EnquiryDial
   });
 
   useEffect(() => {
-    if (!open) {
+    if (open && presetService) {
+      setValue('service', presetService, { shouldValidate: false });
+    }
+  }, [open, presetService, setValue]);
+
+  function handleOpenChange(next: boolean) {
+    if (!next) {
       setSuccess(false);
       setSubmitting(false);
       reset();
-      return;
     }
-    if (presetService) {
-      setValue('service', presetService, { shouldValidate: false });
-    }
-  }, [open, presetService, setValue, reset]);
-
-  function handleOpenChange(next: boolean) {
     onOpenChange(next);
   }
 
