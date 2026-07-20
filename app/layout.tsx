@@ -29,10 +29,12 @@ export const metadata: Metadata = {
   description:
     'Tell us what you need. We connect you with verified local professionals and confirm a convenient time. Home cleaning, repairs, beauty and more.',
   keywords: ['service booking', 'home cleaning', 'handyman', 'beauty services', 'local services UK'],
+  applicationName: 'Servio',
   openGraph: {
     title: 'Servio — Trusted Local Services, Booked Simply',
     description: 'Request a service. Get matched with a verified local professional. Confirm your visit.',
     type: 'website',
+    siteName: 'Servio',
   },
 };
 
