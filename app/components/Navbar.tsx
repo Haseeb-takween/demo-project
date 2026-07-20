@@ -12,6 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { BrandMark } from './BrandMark';
 
 const links = [
   { href: '#services', label: 'Services' },
@@ -23,22 +24,6 @@ const links = [
 
 function openEnquiry() {
   window.dispatchEvent(new CustomEvent('open-enquiry-dialog'));
-}
-
-function BrandMark({ className }: { className?: string }) {
-  return (
-    <span className={`flex items-center gap-2.5 group ${className ?? ''}`}>
-      <span
-        aria-hidden
-        className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-display font-bold text-sm tracking-tight shadow-md shadow-primary/25 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
-      >
-        S
-      </span>
-      <span className="font-display font-semibold text-base tracking-tight text-foreground">
-        Servio
-      </span>
-    </span>
-  );
 }
 
 export function Navbar() {
@@ -81,7 +66,7 @@ export function Navbar() {
 
       <nav className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link href="/" aria-label="Servio home">
-          <BrandMark />
+          <BrandMark interactive />
         </Link>
 
         <ul className="hidden md:flex items-center gap-0.5" role="list">

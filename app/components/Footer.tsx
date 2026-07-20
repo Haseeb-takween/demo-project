@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Container } from './Section';
+import { BrandMark } from './BrandMark';
 
 const navLinks = [
   { href: '#services', label: 'Services' },
@@ -17,18 +18,10 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link
               href="/"
-              className="inline-flex items-center gap-2.5 mb-4"
+              className="inline-flex items-center mb-4"
               aria-label="Servio home"
             >
-              <span
-                aria-hidden
-                className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-display font-bold text-sm shadow-md shadow-primary/25"
-              >
-                S
-              </span>
-              <span className="font-display font-semibold text-sm tracking-tight text-foreground">
-                Servio
-              </span>
+              <BrandMark wordmarkClassName="text-sm" />
             </Link>
 
             <p className="text-sm leading-relaxed text-muted-foreground max-w-xs mb-3">
