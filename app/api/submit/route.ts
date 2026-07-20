@@ -5,9 +5,8 @@ import transporter from '@/lib/email';
 
 export async function POST(request: NextRequest) {
 	try {
-		await connectDB();
-		const { fullName, email, phone, service, preferredDate, message } =
-			await request.json();
+		const body = await request.json();
+		const { fullName, email, phone, service, preferredDate, message } = body ?? {};
 
 		if (
 			!fullName ||
@@ -23,7 +22,17 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const submission = await Submission.create({
+		if (!process.env.MONGODB_URI) {
+			console.error('[submit] MONGODB_URI is not set');
+			return NextResponse.json(
+				{ error: 'Server misconfigured: database' },
+				{ status: 500 },
+			);
+		}
+
+		await connectDB();
+
+		await Submission.create({
 			fullName,
 			email,
 			phone,
@@ -31,15 +40,25 @@ export async function POST(request: NextRequest) {
 			preferredDate,
 			message,
 			reviewed: false,
-    });
-    await transporter.sendMail({
-			from: `"Haseeb Takween Centre" <${process.env.EMAIL_USER}>`,
-			to: email,
-			subject: 'Thank you for your submission',
-			html: `<p>Thank you for your submission ${fullName}. We will get back to you soon.</p>`,
 		});
-    
-   return NextResponse.json(
+
+		// Email is best-effort — do not fail the enquiry if SMTP is down
+		if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+			try {
+				await transporter.sendMail({
+					from: `"Servio" <${process.env.EMAIL_USER}>`,
+					to: email,
+					subject: 'Thank you for your Servio enquiry',
+					html: `<p>Hi ${fullName},</p><p>Thanks for your enquiry. We will get back to you soon.</p>`,
+				});
+			} catch (mailError) {
+				console.error('[submit] Email failed:', mailError);
+			}
+		} else {
+			console.warn('[submit] EMAIL_USER / EMAIL_PASS not set — skipped confirmation email');
+		}
+
+		return NextResponse.json(
 			{
 				message: 'Submission created successfully',
 				fullName,
@@ -48,6 +67,8 @@ export async function POST(request: NextRequest) {
 			{ status: 201 },
 		);
 	} catch (error) {
+		console.error('[submit] Error:', error);
+
 		if (error instanceof Error && error.name === 'ValidationError') {
 			return NextResponse.json(
 				{ error: error.message },
