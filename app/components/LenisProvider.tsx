@@ -2,16 +2,13 @@
 
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export function LenisProvider({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
     const lenis = new Lenis({
+      autoRaf: true,
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       // Let modals / overflow panels scroll with the mouse wheel
@@ -32,18 +29,8 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     }
     window.addEventListener('lenis-dialog-lock', onDialogScrollLock);
 
-    lenis.on('scroll', ScrollTrigger.update);
-
-    function raf(time: number) {
-      lenis.raf(time * 1000);
-    }
-
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
-
     return () => {
       window.removeEventListener('lenis-dialog-lock', onDialogScrollLock);
-      gsap.ticker.remove(raf);
       lenis.destroy();
     };
   }, []);
@@ -51,7 +38,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-/* Scroll progress bar — thin indigo line at top */
+/* Scroll progress bar — thin line at top */
 export function ScrollProgressBar() {
   const barRef = useRef<HTMLDivElement>(null);
 

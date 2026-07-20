@@ -27,12 +27,3 @@ export function Container({
     </div>
   );
 }
-
-/** Use sparingly — max ~1 per 3 sections */
-export function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="text-sm font-medium text-primary mb-3">
-      {children}
-    </p>
-  );
-}
