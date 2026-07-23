@@ -26,7 +26,8 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
 		}
 
 		return NextResponse.json({ success: true });
-	} catch {
+	} catch (error) {
+		console.error("[admin/submissions DELETE] Error:", error);
 		return NextResponse.json(
 			{ error: "Failed to delete submission" },
 			{ status: 500 },
@@ -60,7 +61,8 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 		}
 
 		return NextResponse.json(updated);
-	} catch {
+	} catch (error) {
+		console.error("[admin/submissions PATCH] Error:", error);
 		return NextResponse.json(
 			{ error: "Failed to update submission" },
 			{ status: 500 },

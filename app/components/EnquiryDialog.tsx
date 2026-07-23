@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -359,7 +360,21 @@ export function EnquiryDialog({ open, onOpenChange, presetService }: EnquiryDial
                   )}
                 </Button>
                 <p className="mt-2 m-0 text-center text-xs text-muted-foreground">
-                  Free to enquire · No payment required
+                  Free to enquire · No payment required. By sending, you agree to our{' '}
+                  <Link
+                    href="/privacy"
+                    className="underline underline-offset-2 hover:text-foreground"
+                  >
+                    Privacy Policy
+                  </Link>{' '}
+                  and{' '}
+                  <Link
+                    href="/terms"
+                    className="underline underline-offset-2 hover:text-foreground"
+                  >
+                    Terms
+                  </Link>
+                  .
                 </p>
               </div>
             </form>

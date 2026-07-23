@@ -15,11 +15,11 @@ import {
 import { BrandMark } from './BrandMark';
 
 const links = [
-  { href: '#services', label: 'Services' },
-  { href: '#how-it-works', label: 'How it works' },
-  { href: '#about', label: 'Why us' },
-  { href: '#testimonials', label: 'Reviews' },
-  { href: '#faq', label: 'FAQ' },
+  { href: '/#services', label: 'Services', id: 'services' },
+  { href: '/#how-it-works', label: 'How it works', id: 'how-it-works' },
+  { href: '/#about', label: 'Why us', id: 'about' },
+  { href: '/#testimonials', label: 'Reviews', id: 'testimonials' },
+  { href: '/#faq', label: 'FAQ', id: 'faq' },
 ];
 
 function openEnquiry() {
@@ -35,7 +35,7 @@ export function Navbar() {
   const borderOpacity = useTransform(scrollY, [30, 80], [0, 1]);
 
   useEffect(() => {
-    const ids = links.map((l) => l.href.slice(1));
+    const ids = links.map((l) => l.id);
     const observers = ids.map((id) => {
       const el = document.getElementById(id);
       if (!el) return null;
@@ -70,12 +70,11 @@ export function Navbar() {
         </Link>
 
         <ul className="hidden md:flex items-center gap-0.5" role="list">
-          {links.map(({ href, label }) => {
-            const id = href.slice(1);
+          {links.map(({ href, label, id }) => {
             const active = activeSection === id;
             return (
               <li key={href}>
-                <a
+                <Link
                   href={href}
                   data-active={active ? 'true' : undefined}
                   className={`nav-link-underline px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md ${
@@ -83,7 +82,7 @@ export function Navbar() {
                   }`}
                 >
                   {label}
-                </a>
+                </Link>
               </li>
             );
           })}
@@ -117,13 +116,13 @@ export function Navbar() {
                 <ul className="flex flex-col gap-1" role="list">
                   {links.map(({ href, label }) => (
                     <li key={href}>
-                      <a
+                      <Link
                         href={href}
                         onClick={() => setSheetOpen(false)}
                         className="flex px-4 py-3 text-base font-medium rounded-lg text-foreground hover:bg-muted transition-colors"
                       >
                         {label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

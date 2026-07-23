@@ -11,11 +11,20 @@ export async function GET(request: NextRequest) {
 	}
 
 	try {
+		if (!process.env.MONGODB_URI) {
+			console.error("[admin/submissions] MONGODB_URI is not set");
+			return NextResponse.json(
+				{ error: "Server misconfigured: database" },
+				{ status: 500 },
+			);
+		}
+
 		await connectDB();
 		const submissions = await Submission.find().sort({ createdAt: -1 }).lean();
 
 		return NextResponse.json(submissions);
-	} catch {
+	} catch (error) {
+		console.error("[admin/submissions] Error:", error);
 		return NextResponse.json(
 			{ error: "Failed to load submissions" },
 			{ status: 500 },
